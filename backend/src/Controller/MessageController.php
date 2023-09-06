@@ -35,4 +35,22 @@ class MessageController extends AbstractController
         return new JsonResponse(['id' => $message->getId()], Response::HTTP_CREATED);
     }
 
+    #[Route('/api/message/{uuid}', name: 'api_read', methods: ['GET'])]
+    public function read(string $uuid): JsonResponse
+    {
+        $message = $this->em
+            ->getRepository(Message::class)
+            ->findOneBy(['id' => $uuid]);
+
+        if (!$message) {
+            return new JsonResponse(['error' => 'Message not found'], 404);
+        }
+
+        return new JsonResponse([
+            'uuid' => $message->getId(),
+            'message' => $message->getText(),
+            'timestamp' => $message->getTimestamp(),
+        ]);
+    }
+
 }
