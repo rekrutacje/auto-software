@@ -15,13 +15,6 @@ Polecenia do wykonania:
 (c) Odczyt po UUID wiadomości. <br>
 (d) Zapis ma zwrócić potwierdzenie w formie UUID zapisanej wiadomości. <br>
 
-Moje uwagi do zadania 1:
-1. Zastosowanie bazy sqlite3 do przechowywania wiadomości zamiast przechowywanie bezpośrednio w plikach:
-- lepsza wydajność bazy danych, na potrzeby zadania wystarczy sqlite3
-- łatwiejsza manipulacja danymi, np. na potrzeby sortowania
-- zapewnienie spójności danych, np. poprzez użycie unikalności kolumny dla UUID
-  (jeżeli wymaganie co do używania plików tekstowych dla przechowywania wiadomości jest restrykcyjne, to oczywiście mogę się dostosować)
-
 #### Zadanie 2 - frontend
 
 Wytyczne ogólne do zadania:
