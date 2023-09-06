@@ -1,0 +1,16 @@
+# Ignoruj śmieci tworzone przez MacOS
+.DS_Store
+_*
+
+# Ignoruj katalog JetBrains
+.idea/
+
+# Ignoruj skrypt inicjalizujący GitHub'a
+github-init.sh
+
+# Ignoruj notatki podręczne
+temp/
+
+# Ignoruj logi docker-compose
+docker-compose-build.log
+docker-compose-pull.log
