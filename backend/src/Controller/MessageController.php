@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Repository\MessageRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class MessageController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/api/message', name: 'api_save', methods: ['POST'])]
+    #[Route('/api/message', name: 'api_message_save', methods: ['POST'])]
     public function save(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -35,7 +36,7 @@ class MessageController extends AbstractController
         return new JsonResponse(['id' => $message->getId()], Response::HTTP_CREATED);
     }
 
-    #[Route('/api/message/{uuid}', name: 'api_read', methods: ['GET'])]
+    #[Route('/api/message/{uuid}', name: 'api_message_read', methods: ['GET'])]
     public function read(string $uuid): JsonResponse
     {
         $message = $this->em
@@ -50,7 +51,32 @@ class MessageController extends AbstractController
             'uuid' => $message->getId(),
             'message' => $message->getText(),
             'timestamp' => $message->getTimestamp(),
-        ]);
+        ], Response::HTTP_OK);
+    }
+
+    #[Route('/api/messages', name: 'api_messages_list', methods: ['GET'])]
+    public function list(Request $request): JsonResponse
+    {
+        // Domyślnie sortowanie po 'id'
+        $sortBy = $request->query->get('sortBy', 'id');
+        // Domyślnie sortowanie rosnąco
+        $order = $request->query->get('order', 'ASC');
+
+        /** @var MessageRepository $repo */
+        $repo = $this->em->getRepository(Message::class);
+
+        // Sortowanie
+        $messages = $repo->findBy([], [$sortBy => $order]);
+
+        $response = array_map(function (Message $message) {
+            return [
+                'uuid' => $message->getId(),
+                'message' => $message->getText(),
+                'timestamp' => $message->getTimestamp(),
+            ];
+        }, $messages);
+
+        return new JsonResponse($response, Response::HTTP_OK);
     }
 
 }
